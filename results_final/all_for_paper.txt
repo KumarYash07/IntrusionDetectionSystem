@@ -1,0 +1,397 @@
+﻿=== results_final\e2_open_set_summary.csv ===
+,auroc,auroc,aupr,aupr,tpr_at_fpr,tpr_at_fpr,known_fpr,known_fpr,unknown_detection_rate,unknown_detection_rate,unknown_precision,unknown_precision,open_set_f1,open_set_f1
+,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std
+method,,,,,,,,,,,,,,
+anomaly_only,0.8175,0.0911,0.2538,0.269,0.0938,0.197,0.0432,0.0265,0.0635,0.1132,0.1183,0.2193,0.6542,0.0735
+classifier_only,,,,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.7083,0.0337
+energy,0.8748,0.1008,0.6054,0.2487,0.5884,0.3444,0.0591,0.0288,0.5977,0.3607,0.3633,0.3526,0.7452,0.0452
+mahalanobis,0.9033,0.0665,0.375,0.2835,0.3466,0.4051,0.0453,0.0324,0.3126,0.3803,0.2311,0.3511,0.6484,0.0717
+msp_uncalibrated,0.817,0.0832,0.359,0.2636,0.3053,0.2297,0.055,0.0266,0.303,0.2444,0.2333,0.3187,0.7324,0.038
+proposed,0.9453,0.0435,0.6284,0.2494,0.8412,0.2139,0.0552,0.0339,0.8424,0.2169,0.5253,0.3579,0.7027,0.0527
+proposed_maha,0.9616,0.0371,0.772,0.1879,0.9035,0.0997,0.0491,0.0271,0.9028,0.1003,0.5438,0.3483,0.7259,0.0274
+rejection_only,0.8585,0.0908,0.5216,0.2506,0.505,0.2987,0.0531,0.0277,0.4963,0.3233,0.3532,0.3505,0.7454,0.0448
+=== results_final\e2_per_family.csv ===
+,,auroc,auroc,aupr,aupr,tpr_at_fpr,tpr_at_fpr,known_fpr,known_fpr,unknown_detection_rate,unknown_detection_rate,unknown_precision,unknown_precision,open_set_f1,open_set_f1
+,,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std
+family,method,,,,,,,,,,,,,,
+httpflood,anomaly_only,0.8649,0.0387,0.6613,0.0652,0.1107,0.1165,0.0399,0.0243,0.084,0.1161,0.4549,0.1982,0.6228,0.0907
+httpflood,classifier_only,,,,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.6925,0.0276
+httpflood,energy,0.8439,0.0405,0.8315,0.0627,0.6693,0.1635,0.0579,0.0333,0.6704,0.1599,0.8635,0.1031,0.7793,0.0293
+httpflood,mahalanobis,0.9198,0.0284,0.8155,0.047,0.4276,0.1765,0.0505,0.0454,0.3441,0.1495,0.8196,0.0599,0.6432,0.0422
+httpflood,msp_uncalibrated,0.7888,0.0513,0.6821,0.1166,0.3494,0.2092,0.0549,0.0259,0.4033,0.2489,0.6757,0.3222,0.7612,0.0444
+httpflood,proposed,0.9308,0.0088,0.8904,0.0083,0.8181,0.0133,0.0743,0.0384,0.8182,0.0184,0.872,0.0578,0.6921,0.0185
+httpflood,proposed_maha,0.9328,0.0126,0.8934,0.0075,0.8185,0.0135,0.0749,0.041,0.8177,0.0173,0.8708,0.0628,0.708,0.0224
+httpflood,rejection_only,0.858,0.0267,0.8521,0.036,0.7249,0.1065,0.0507,0.032,0.6736,0.2474,0.9009,0.0647,0.7957,0.0365
+scans,anomaly_only,0.9176,0.0168,0.0172,0.0017,0.2623,0.3368,0.0447,0.0282,0.1662,0.1552,0.0082,0.0053,0.7141,0.0186
+scans,classifier_only,,,,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.7383,0.0103
+scans,energy,0.9183,0.0426,0.3956,0.1364,0.8011,0.0798,0.0663,0.0362,0.8195,0.1085,0.0453,0.037,0.7477,0.0243
+scans,mahalanobis,0.977,0.0186,0.2046,0.0618,0.9443,0.0761,0.0418,0.026,0.8937,0.0813,0.0646,0.0289,0.7352,0.031
+scans,msp_uncalibrated,0.8718,0.0309,0.0414,0.0389,0.431,0.1115,0.0513,0.0277,0.3712,0.1893,0.0253,0.0168,0.7469,0.0157
+scans,proposed,0.9678,0.0301,0.4667,0.1928,0.9207,0.0881,0.0603,0.0375,0.9157,0.0857,0.0857,0.1135,0.7509,0.0367
+scans,proposed_maha,0.9613,0.0479,0.6285,0.2181,0.9099,0.1008,0.0432,0.0179,0.9095,0.1009,0.0646,0.037,0.7498,0.0186
+scans,rejection_only,0.901,0.0592,0.35,0.1525,0.7043,0.0458,0.0523,0.0282,0.6562,0.1465,0.0585,0.0658,0.7539,0.0212
+slowrate,anomaly_only,0.7319,0.0469,0.2841,0.1008,0.0012,0.0014,0.0439,0.0336,0.002,0.0039,0.0094,0.0142,0.6738,0.0709
+slowrate,classifier_only,,,,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.7312,0.0242
+slowrate,energy,0.7547,0.0915,0.4008,0.1634,0.0655,0.0861,0.055,0.031,0.0404,0.0338,0.2421,0.3124,0.729,0.0183
+slowrate,mahalanobis,0.8222,0.0535,0.3648,0.1051,0.0072,0.0034,0.0468,0.0377,0.0062,0.0057,0.0345,0.0387,0.6372,0.055
+slowrate,msp_uncalibrated,0.7199,0.068,0.3052,0.1312,0.0053,0.0054,0.0598,0.0358,0.0061,0.006,0.0248,0.0283,0.7257,0.0226
+slowrate,proposed,0.9154,0.0576,0.7606,0.1415,0.8181,0.121,0.0497,0.0358,0.8289,0.1457,0.8098,0.1231,0.6961,0.0533
+slowrate,proposed_maha,0.9573,0.0402,0.8258,0.1381,0.8856,0.1254,0.0373,0.0065,0.884,0.1264,0.8268,0.1012,0.7366,0.0187
+slowrate,rejection_only,0.7358,0.0631,0.32,0.133,0.0262,0.0226,0.0557,0.0356,0.0291,0.0168,0.1941,0.1773,0.7223,0.0187
+synflood,anomaly_only,0.7558,0.0787,0.0526,0.0106,0.0009,0.0013,0.0444,0.0282,0.0017,0.0027,0.0007,0.0011,0.6063,0.0548
+synflood,classifier_only,,,,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.671,0.0106
+synflood,energy,0.9823,0.0196,0.7937,0.1705,0.8178,0.2249,0.0571,0.0214,0.8607,0.1911,0.3024,0.1374,0.7249,0.0749
+synflood,mahalanobis,0.8943,0.0395,0.115,0.0364,0.0073,0.006,0.0422,0.0276,0.0064,0.0069,0.0057,0.0085,0.5781,0.0533
+synflood,msp_uncalibrated,0.8874,0.0435,0.4072,0.1862,0.4355,0.1964,0.0539,0.0241,0.4313,0.192,0.2074,0.1539,0.6956,0.033
+synflood,proposed,0.967,0.0455,0.3959,0.1738,0.8079,0.4292,0.0363,0.018,0.8069,0.4304,0.3336,0.1953,0.6718,0.0662
+synflood,proposed_maha,0.9948,0.0074,0.7404,0.2281,1.0,0.0,0.0409,0.0176,1.0,0.0,0.4132,0.1367,0.7091,0.0276
+synflood,rejection_only,0.9393,0.0421,0.5642,0.172,0.5644,0.0937,0.0535,0.0231,0.6263,0.22,0.2594,0.1313,0.7099,0.0436
+=== results_final\e2_per_class.csv ===
+family,method,cls,n,flag_rate
+httpflood,anomaly_only,Benign,11483.2,0.156
+httpflood,anomaly_only,ICMPFlood,129.8,0.0
+httpflood,anomaly_only,SYNFlood,1826.6,0.001
+httpflood,anomaly_only,SYNScan,70.2,0.341
+httpflood,anomaly_only,SlowrateDoS,13454.2,0.003
+httpflood,anomaly_only,TCPConnectScan,37.4,0.328
+httpflood,anomaly_only,UDPFlood,18383.6,0.0
+httpflood,anomaly_only,UDPScan,87.6,0.275
+httpflood,energy,Benign,11483.2,0.098
+httpflood,energy,ICMPFlood,129.8,0.008
+httpflood,energy,SYNFlood,1826.6,0.003
+httpflood,energy,SYNScan,70.2,0.206
+httpflood,energy,SlowrateDoS,13454.2,0.005
+httpflood,energy,TCPConnectScan,37.4,0.329
+httpflood,energy,UDPFlood,18383.6,0.078
+httpflood,energy,UDPScan,87.6,0.234
+httpflood,mahalanobis,Benign,11483.2,0.182
+httpflood,mahalanobis,ICMPFlood,129.8,0.0
+httpflood,mahalanobis,SYNFlood,1826.6,0.007
+httpflood,mahalanobis,SYNScan,70.2,0.384
+httpflood,mahalanobis,SlowrateDoS,13454.2,0.014
+httpflood,mahalanobis,TCPConnectScan,37.4,0.771
+httpflood,mahalanobis,UDPFlood,18383.6,0.0
+httpflood,mahalanobis,UDPScan,87.6,0.152
+httpflood,msp_uncalibrated,Benign,11483.2,0.11
+httpflood,msp_uncalibrated,ICMPFlood,129.8,0.006
+httpflood,msp_uncalibrated,SYNFlood,1826.6,0.001
+httpflood,msp_uncalibrated,SYNScan,70.2,0.201
+httpflood,msp_uncalibrated,SlowrateDoS,13454.2,0.002
+httpflood,msp_uncalibrated,TCPConnectScan,37.4,0.118
+httpflood,msp_uncalibrated,UDPFlood,18383.6,0.07
+httpflood,msp_uncalibrated,UDPScan,87.6,0.218
+httpflood,proposed,Benign,11483.2,0.031
+httpflood,proposed,ICMPFlood,129.8,0.161
+httpflood,proposed,SYNFlood,1826.6,0.046
+httpflood,proposed,SYNScan,70.2,0.589
+httpflood,proposed,SlowrateDoS,13454.2,0.038
+httpflood,proposed,TCPConnectScan,37.4,0.814
+httpflood,proposed,UDPFlood,18383.6,0.11
+httpflood,proposed,UDPScan,87.6,0.484
+httpflood,proposed_maha,Benign,11483.2,0.053
+httpflood,proposed_maha,ICMPFlood,129.8,0.0
+httpflood,proposed_maha,SYNFlood,1826.6,0.006
+httpflood,proposed_maha,SYNScan,70.2,0.567
+httpflood,proposed_maha,SlowrateDoS,13454.2,0.039
+httpflood,proposed_maha,TCPConnectScan,37.4,0.814
+httpflood,proposed_maha,UDPFlood,18383.6,0.101
+httpflood,proposed_maha,UDPScan,87.6,0.474
+httpflood,rejection_only,Benign,11483.2,0.103
+httpflood,rejection_only,ICMPFlood,129.8,0.006
+httpflood,rejection_only,SYNFlood,1826.6,0.002
+httpflood,rejection_only,SYNScan,70.2,0.293
+httpflood,rejection_only,SlowrateDoS,13454.2,0.003
+httpflood,rejection_only,TCPConnectScan,37.4,0.201
+httpflood,rejection_only,UDPFlood,18383.6,0.064
+httpflood,rejection_only,UDPScan,87.6,0.271
+scans,anomaly_only,Benign,11483.2,0.239
+scans,anomaly_only,HTTPFlood,26748.0,0.024
+scans,anomaly_only,ICMPFlood,129.8,0.0
+scans,anomaly_only,SYNFlood,1826.6,0.002
+scans,anomaly_only,SlowrateDoS,13454.2,0.0
+scans,anomaly_only,UDPFlood,18383.6,0.0
+scans,energy,Benign,11483.2,0.117
+scans,energy,HTTPFlood,26748.0,0.008
+scans,energy,ICMPFlood,129.8,0.008
+scans,energy,SYNFlood,1826.6,0.006
+scans,energy,SlowrateDoS,13454.2,0.042
+scans,energy,UDPFlood,18383.6,0.168
+scans,mahalanobis,Benign,11483.2,0.216
+scans,mahalanobis,HTTPFlood,26748.0,0.023
+scans,mahalanobis,ICMPFlood,129.8,0.0
+scans,mahalanobis,SYNFlood,1826.6,0.006
+scans,mahalanobis,SlowrateDoS,13454.2,0.006
+scans,mahalanobis,UDPFlood,18383.6,0.0
+scans,msp_uncalibrated,Benign,11483.2,0.125
+scans,msp_uncalibrated,HTTPFlood,26748.0,0.014
+scans,msp_uncalibrated,ICMPFlood,129.8,0.003
+scans,msp_uncalibrated,SYNFlood,1826.6,0.001
+scans,msp_uncalibrated,SlowrateDoS,13454.2,0.018
+scans,msp_uncalibrated,UDPFlood,18383.6,0.097
+scans,proposed,Benign,11483.2,0.074
+scans,proposed,HTTPFlood,26748.0,0.021
+scans,proposed,ICMPFlood,129.8,0.026
+scans,proposed,SYNFlood,1826.6,0.019
+scans,proposed,SlowrateDoS,13454.2,0.022
+scans,proposed,UDPFlood,18383.6,0.134
+scans,proposed_maha,Benign,11483.2,0.021
+scans,proposed_maha,HTTPFlood,26748.0,0.064
+scans,proposed_maha,ICMPFlood,129.8,0.0
+scans,proposed_maha,SYNFlood,1826.6,0.007
+scans,proposed_maha,SlowrateDoS,13454.2,0.088
+scans,proposed_maha,UDPFlood,18383.6,0.0
+scans,rejection_only,Benign,11483.2,0.128
+scans,rejection_only,HTTPFlood,26748.0,0.015
+scans,rejection_only,ICMPFlood,129.8,0.005
+scans,rejection_only,SYNFlood,1826.6,0.002
+scans,rejection_only,SlowrateDoS,13454.2,0.02
+scans,rejection_only,UDPFlood,18383.6,0.096
+slowrate,anomaly_only,Benign,11483.2,0.191
+slowrate,anomaly_only,HTTPFlood,26748.0,0.018
+slowrate,anomaly_only,ICMPFlood,129.8,0.0
+slowrate,anomaly_only,SYNFlood,1826.6,0.002
+slowrate,anomaly_only,SYNScan,70.2,0.236
+slowrate,anomaly_only,TCPConnectScan,37.4,0.265
+slowrate,anomaly_only,UDPFlood,18383.6,0.0
+slowrate,anomaly_only,UDPScan,87.6,0.074
+slowrate,energy,Benign,11483.2,0.11
+slowrate,energy,HTTPFlood,26748.0,0.001
+slowrate,energy,ICMPFlood,129.8,0.012
+slowrate,energy,SYNFlood,1826.6,0.006
+slowrate,energy,SYNScan,70.2,0.121
+slowrate,energy,TCPConnectScan,37.4,0.187
+slowrate,energy,UDPFlood,18383.6,0.119
+slowrate,energy,UDPScan,87.6,0.18
+slowrate,mahalanobis,Benign,11483.2,0.195
+slowrate,mahalanobis,HTTPFlood,26748.0,0.019
+slowrate,mahalanobis,ICMPFlood,129.8,0.0
+slowrate,mahalanobis,SYNFlood,1826.6,0.006
+slowrate,mahalanobis,SYNScan,70.2,0.237
+slowrate,mahalanobis,TCPConnectScan,37.4,0.728
+slowrate,mahalanobis,UDPFlood,18383.6,0.0
+slowrate,mahalanobis,UDPScan,87.6,0.206
+slowrate,msp_uncalibrated,Benign,11483.2,0.141
+slowrate,msp_uncalibrated,HTTPFlood,26748.0,0.0
+slowrate,msp_uncalibrated,ICMPFlood,129.8,0.012
+slowrate,msp_uncalibrated,SYNFlood,1826.6,0.001
+slowrate,msp_uncalibrated,SYNScan,70.2,0.187
+slowrate,msp_uncalibrated,TCPConnectScan,37.4,0.15
+slowrate,msp_uncalibrated,UDPFlood,18383.6,0.105
+slowrate,msp_uncalibrated,UDPScan,87.6,0.223
+slowrate,proposed,Benign,11483.2,0.032
+slowrate,proposed,HTTPFlood,26748.0,0.009
+slowrate,proposed,ICMPFlood,129.8,0.338
+slowrate,proposed,SYNFlood,1826.6,0.018
+slowrate,proposed,SYNScan,70.2,0.472
+slowrate,proposed,TCPConnectScan,37.4,0.812
+slowrate,proposed,UDPFlood,18383.6,0.114
+slowrate,proposed,UDPScan,87.6,0.473
+slowrate,proposed_maha,Benign,11483.2,0.049
+slowrate,proposed_maha,HTTPFlood,26748.0,0.037
+slowrate,proposed_maha,ICMPFlood,129.8,0.0
+slowrate,proposed_maha,SYNFlood,1826.6,0.006
+slowrate,proposed_maha,SYNScan,70.2,0.488
+slowrate,proposed_maha,TCPConnectScan,37.4,0.82
+slowrate,proposed_maha,UDPFlood,18383.6,0.031
+slowrate,proposed_maha,UDPScan,87.6,0.446
+slowrate,rejection_only,Benign,11483.2,0.134
+slowrate,rejection_only,HTTPFlood,26748.0,0.002
+slowrate,rejection_only,ICMPFlood,129.8,0.019
+slowrate,rejection_only,SYNFlood,1826.6,0.002
+slowrate,rejection_only,SYNScan,70.2,0.254
+slowrate,rejection_only,TCPConnectScan,37.4,0.29
+slowrate,rejection_only,UDPFlood,18383.6,0.091
+slowrate,rejection_only,UDPScan,87.6,0.29
+synflood,anomaly_only,Benign,11483.2,0.235
+synflood,anomaly_only,HTTPFlood,26748.0,0.02
+synflood,anomaly_only,ICMPFlood,129.8,0.0
+synflood,anomaly_only,SYNScan,70.2,0.266
+synflood,anomaly_only,SlowrateDoS,13454.2,0.0
+synflood,anomaly_only,TCPConnectScan,37.4,0.366
+synflood,anomaly_only,UDPFlood,18383.6,0.0
+synflood,anomaly_only,UDPScan,87.6,0.218
+synflood,energy,Benign,11483.2,0.039
+synflood,energy,HTTPFlood,26748.0,0.01
+synflood,energy,ICMPFlood,129.8,0.012
+synflood,energy,SYNScan,70.2,0.249
+synflood,energy,SlowrateDoS,13454.2,0.014
+synflood,energy,TCPConnectScan,37.4,0.442
+synflood,energy,UDPFlood,18383.6,0.157
+synflood,energy,UDPScan,87.6,0.295
+synflood,mahalanobis,Benign,11483.2,0.208
+synflood,mahalanobis,HTTPFlood,26748.0,0.022
+synflood,mahalanobis,ICMPFlood,129.8,0.0
+synflood,mahalanobis,SYNScan,70.2,0.306
+synflood,mahalanobis,SlowrateDoS,13454.2,0.006
+synflood,mahalanobis,TCPConnectScan,37.4,0.746
+synflood,mahalanobis,UDPFlood,18383.6,0.0
+synflood,mahalanobis,UDPScan,87.6,0.253
+synflood,msp_uncalibrated,Benign,11483.2,0.131
+synflood,msp_uncalibrated,HTTPFlood,26748.0,0.013
+synflood,msp_uncalibrated,ICMPFlood,129.8,0.006
+synflood,msp_uncalibrated,SYNScan,70.2,0.172
+synflood,msp_uncalibrated,SlowrateDoS,13454.2,0.018
+synflood,msp_uncalibrated,TCPConnectScan,37.4,0.168
+synflood,msp_uncalibrated,UDPFlood,18383.6,0.097
+synflood,msp_uncalibrated,UDPScan,87.6,0.218
+synflood,proposed,Benign,11483.2,0.027
+synflood,proposed,HTTPFlood,26748.0,0.016
+synflood,proposed,ICMPFlood,129.8,0.152
+synflood,proposed,SYNScan,70.2,0.507
+synflood,proposed,SlowrateDoS,13454.2,0.015
+synflood,proposed,TCPConnectScan,37.4,0.808
+synflood,proposed,UDPFlood,18383.6,0.081
+synflood,proposed,UDPScan,87.6,0.476
+synflood,proposed_maha,Benign,11483.2,0.027
+synflood,proposed_maha,HTTPFlood,26748.0,0.056
+synflood,proposed_maha,ICMPFlood,129.8,0.0
+synflood,proposed_maha,SYNScan,70.2,0.507
+synflood,proposed_maha,SlowrateDoS,13454.2,0.069
+synflood,proposed_maha,TCPConnectScan,37.4,0.808
+synflood,proposed_maha,UDPFlood,18383.6,0.0
+synflood,proposed_maha,UDPScan,87.6,0.441
+synflood,rejection_only,Benign,11483.2,0.129
+synflood,rejection_only,HTTPFlood,26748.0,0.014
+synflood,rejection_only,ICMPFlood,129.8,0.006
+synflood,rejection_only,SYNScan,70.2,0.245
+synflood,rejection_only,SlowrateDoS,13454.2,0.021
+synflood,rejection_only,TCPConnectScan,37.4,0.322
+synflood,rejection_only,UDPFlood,18383.6,0.093
+synflood,rejection_only,UDPScan,87.6,0.284
+=== results_final\e3_calibration.csv ===
+,T,T,ece_raw,ece_raw,ece_cal,ece_cal
+,mean,std,mean,std,mean,std
+family,,,,,,
+httpflood,3.1839,0.3154,0.1792,0.0393,0.1358,0.0245
+scans,3.1323,0.1538,0.1147,0.029,0.0819,0.0196
+slowrate,3.116,0.1255,0.1466,0.0296,0.1072,0.0256
+synflood,2.9164,0.1604,0.1152,0.029,0.086,0.0208
+=== results_final\e4_threshold.csv ===
+,known_accept_rate,known_accept_rate,unknown_detection_rate,unknown_detection_rate
+,mean,std,mean,std
+known_accept_target,,,,
+0.8,0.78,0.0396,0.7697,0.2984
+0.85,0.8362,0.037,0.6826,0.3139
+0.9,0.8945,0.0379,0.5946,0.3212
+0.95,0.9475,0.0274,0.4963,0.3233
+0.99,0.9905,0.0062,0.4204,0.2904
+=== results_select_none\e1_closed_set_summary.csv ===
+,seed,seed,accuracy,accuracy,precision,precision,recall,recall,macro_f1,macro_f1,val_macro_f1,val_macro_f1,fit_seconds,fit_seconds,latency_ms_batch,latency_ms_batch,latency_ms_single,latency_ms_single,model_size_mb,model_size_mb
+,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std
+model,,,,,,,,,,,,,,,,,,,,
+lgbm,101.0,1.0,0.6627,0.092,0.3451,0.1302,0.3488,0.0496,0.33,0.0812,0.3158,0.0758,6.4285,0.3054,0.0091,0.0009,1.1848,0.0671,2.4391,0.0492
+majority_baseline,101.0,1.0,0.329,0.023,0.0366,0.0026,0.1111,0.0,0.055,0.0029,,,,,,,,,,
+rf,101.0,1.0,0.8433,0.0267,0.8777,0.0231,0.8782,0.0257,0.875,0.0246,0.844,0.0163,3.6885,0.2431,0.004,0.0005,27.1226,1.1662,216.9941,42.6406
+shuffled_label_rf,101.0,1.0,0.3034,0.0279,0.1232,0.0042,0.1219,0.003,0.1147,0.0007,,,,,,,,,,
+xgb,101.0,1.0,0.8539,0.0322,0.8849,0.0154,0.8783,0.0278,0.8763,0.0231,0.8394,0.0072,11.0999,0.7012,0.0047,0.0002,0.7539,0.1705,3.6912,0.026
+=== results_final\report.md ===
+# Experiment Evaluation Report
+
+Source Results Directory: `results_final`
+
+Model: `rf`
+
+## 1. Overall Open-Set Detection Performance
+
+Averaged across all holdout families and random seeds.
+
+| Method | Auroc | Aupr | Unknown Precision | Unknown Detection Rate | Known Fpr | Open Set F1 |
+| --- | --- | --- | --- | --- | --- | --- |
+| **anomaly_only** | 0.8175 Â± 0.0911 | 0.2538 Â± 0.2690 | 0.1183 Â± 0.2193 | 0.0635 Â± 0.1132 | 0.0432 Â± 0.0265 | 0.6542 Â± 0.0735 |
+| **classifier_only** | â€” | â€” | 0.0000 Â± 0.0000 | 0.0000 Â± 0.0000 | 0.0000 Â± 0.0000 | 0.7083 Â± 0.0337 |
+| **energy** | n/a: no logits | n/a: no logits | n/a: no logits | n/a: no logits | n/a: no logits | n/a: no logits |
+| **mahalanobis** | 0.9033 Â± 0.0665 | 0.3750 Â± 0.2835 | 0.2311 Â± 0.3511 | 0.3126 Â± 0.3803 | 0.0453 Â± 0.0324 | 0.6484 Â± 0.0717 |
+| **msp_uncalibrated** | 0.8170 Â± 0.0832 | 0.3590 Â± 0.2636 | 0.2333 Â± 0.3187 | 0.3030 Â± 0.2444 | 0.0550 Â± 0.0266 | 0.7324 Â± 0.0380 |
+| **proposed** | 0.9453 Â± 0.0435 | 0.6284 Â± 0.2494 | 0.5253 Â± 0.3579 | 0.8424 Â± 0.2169 | 0.0552 Â± 0.0339 | 0.7027 Â± 0.0527 |
+| **proposed_maha** | 0.9616 Â± 0.0371 | 0.7720 Â± 0.1879 | 0.5438 Â± 0.3483 | 0.9028 Â± 0.1003 | 0.0491 Â± 0.0271 | 0.7259 Â± 0.0274 |
+| **rejection_only** | 0.8585 Â± 0.0908 | 0.5216 Â± 0.2506 | 0.3532 Â± 0.3505 | 0.4963 Â± 0.3233 | 0.0531 Â± 0.0277 | 0.7454 Â± 0.0448 |
+
+
+## 2. Per-Family Open-Set Detection Breakdown
+
+| Family | Method | Auroc | Aupr | Unknown Precision | Unknown Detection Rate | Known Fpr | Open Set F1 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| httpflood | `anomaly_only` | 0.8649 Â± 0.0387 | 0.6613 Â± 0.0652 | 0.4549 Â± 0.1982 | 0.0840 Â± 0.1161 | 0.0399 Â± 0.0243 | 0.6228 Â± 0.0907 |
+| httpflood | `classifier_only` | â€” | â€” | 0.0000 Â± 0.0000 | 0.0000 Â± 0.0000 | 0.0000 Â± 0.0000 | 0.6925 Â± 0.0276 |
+| httpflood | `energy` | n/a: no logits | n/a: no logits | n/a: no logits | n/a: no logits | n/a: no logits | n/a: no logits |
+| httpflood | `mahalanobis` | 0.9198 Â± 0.0284 | 0.8155 Â± 0.0470 | 0.8196 Â± 0.0599 | 0.3441 Â± 0.1495 | 0.0505 Â± 0.0454 | 0.6432 Â± 0.0422 |
+| httpflood | `msp_uncalibrated` | 0.7888 Â± 0.0513 | 0.6821 Â± 0.1166 | 0.6757 Â± 0.3222 | 0.4033 Â± 0.2489 | 0.0549 Â± 0.0259 | 0.7612 Â± 0.0444 |
+| httpflood | `proposed` | 0.9308 Â± 0.0088 | 0.8904 Â± 0.0083 | 0.8720 Â± 0.0578 | 0.8182 Â± 0.0184 | 0.0743 Â± 0.0384 | 0.6921 Â± 0.0185 |
+| httpflood | `proposed_maha` | 0.9328 Â± 0.0126 | 0.8934 Â± 0.0075 | 0.8708 Â± 0.0628 | 0.8177 Â± 0.0173 | 0.0749 Â± 0.0410 | 0.7080 Â± 0.0224 |
+| httpflood | `rejection_only` | 0.8580 Â± 0.0267 | 0.8521 Â± 0.0360 | 0.9009 Â± 0.0647 | 0.6736 Â± 0.2474 | 0.0507 Â± 0.0320 | 0.7957 Â± 0.0365 |
+| scans | `anomaly_only` | 0.9176 Â± 0.0168 | 0.0172 Â± 0.0017 | 0.0082 Â± 0.0053 | 0.1662 Â± 0.1552 | 0.0447 Â± 0.0282 | 0.7141 Â± 0.0186 |
+| scans | `classifier_only` | â€” | â€” | 0.0000 Â± 0.0000 | 0.0000 Â± 0.0000 | 0.0000 Â± 0.0000 | 0.7383 Â± 0.0103 |
+| scans | `energy` | n/a: no logits | n/a: no logits | n/a: no logits | n/a: no logits | n/a: no logits | n/a: no logits |
+| scans | `mahalanobis` | 0.9770 Â± 0.0186 | 0.2046 Â± 0.0618 | 0.0646 Â± 0.0289 | 0.8937 Â± 0.0813 | 0.0418 Â± 0.0260 | 0.7352 Â± 0.0310 |
+| scans | `msp_uncalibrated` | 0.8718 Â± 0.0309 | 0.0414 Â± 0.0389 | 0.0253 Â± 0.0168 | 0.3712 Â± 0.1893 | 0.0513 Â± 0.0277 | 0.7469 Â± 0.0157 |
+| scans | `proposed` | 0.9678 Â± 0.0301 | 0.4667 Â± 0.1928 | 0.0857 Â± 0.1135 | 0.9157 Â± 0.0857 | 0.0603 Â± 0.0375 | 0.7509 Â± 0.0367 |
+| scans | `proposed_maha` | 0.9613 Â± 0.0479 | 0.6285 Â± 0.2181 | 0.0646 Â± 0.0370 | 0.9095 Â± 0.1009 | 0.0432 Â± 0.0179 | 0.7498 Â± 0.0186 |
+| scans | `rejection_only` | 0.9010 Â± 0.0592 | 0.3500 Â± 0.1525 | 0.0585 Â± 0.0658 | 0.6562 Â± 0.1465 | 0.0523 Â± 0.0282 | 0.7539 Â± 0.0212 |
+| slowrate | `anomaly_only` | 0.7319 Â± 0.0469 | 0.2841 Â± 0.1008 | 0.0094 Â± 0.0142 | 0.0020 Â± 0.0039 | 0.0439 Â± 0.0336 | 0.6738 Â± 0.0709 |
+| slowrate | `classifier_only` | â€” | â€” | 0.0000 Â± 0.0000 | 0.0000 Â± 0.0000 | 0.0000 Â± 0.0000 | 0.7312 Â± 0.0242 |
+| slowrate | `energy` | n/a: no logits | n/a: no logits | n/a: no logits | n/a: no logits | n/a: no logits | n/a: no logits |
+| slowrate | `mahalanobis` | 0.8222 Â± 0.0535 | 0.3648 Â± 0.1051 | 0.0345 Â± 0.0387 | 0.0062 Â± 0.0057 | 0.0468 Â± 0.0377 | 0.6372 Â± 0.0550 |
+| slowrate | `msp_uncalibrated` | 0.7199 Â± 0.0680 | 0.3052 Â± 0.1312 | 0.0248 Â± 0.0283 | 0.0061 Â± 0.0060 | 0.0598 Â± 0.0358 | 0.7257 Â± 0.0226 |
+| slowrate | `proposed` | 0.9154 Â± 0.0576 | 0.7606 Â± 0.1415 | 0.8098 Â± 0.1231 | 0.8289 Â± 0.1457 | 0.0497 Â± 0.0358 | 0.6961 Â± 0.0533 |
+| slowrate | `proposed_maha` | 0.9573 Â± 0.0402 | 0.8258 Â± 0.1381 | 0.8268 Â± 0.1012 | 0.8840 Â± 0.1264 | 0.0373 Â± 0.0065 | 0.7366 Â± 0.0187 |
+| slowrate | `rejection_only` | 0.7358 Â± 0.0631 | 0.3200 Â± 0.1330 | 0.1941 Â± 0.1773 | 0.0291 Â± 0.0168 | 0.0557 Â± 0.0356 | 0.7223 Â± 0.0187 |
+| synflood | `anomaly_only` | 0.7558 Â± 0.0787 | 0.0526 Â± 0.0106 | 0.0007 Â± 0.0011 | 0.0017 Â± 0.0027 | 0.0444 Â± 0.0282 | 0.6063 Â± 0.0548 |
+| synflood | `classifier_only` | â€” | â€” | 0.0000 Â± 0.0000 | 0.0000 Â± 0.0000 | 0.0000 Â± 0.0000 | 0.6710 Â± 0.0106 |
+| synflood | `energy` | n/a: no logits | n/a: no logits | n/a: no logits | n/a: no logits | n/a: no logits | n/a: no logits |
+| synflood | `mahalanobis` | 0.8943 Â± 0.0395 | 0.1150 Â± 0.0364 | 0.0057 Â± 0.0085 | 0.0064 Â± 0.0069 | 0.0422 Â± 0.0276 | 0.5781 Â± 0.0533 |
+| synflood | `msp_uncalibrated` | 0.8874 Â± 0.0435 | 0.4072 Â± 0.1862 | 0.2074 Â± 0.1539 | 0.4313 Â± 0.1920 | 0.0539 Â± 0.0241 | 0.6956 Â± 0.0330 |
+| synflood | `proposed` | 0.9670 Â± 0.0455 | 0.3959 Â± 0.1738 | 0.3336 Â± 0.1953 | 0.8069 Â± 0.4304 | 0.0363 Â± 0.0180 | 0.6718 Â± 0.0662 |
+| synflood | `proposed_maha` | 0.9948 Â± 0.0074 | 0.7404 Â± 0.2281 | 0.4132 Â± 0.1367 | 1.0000 Â± 0.0000 | 0.0409 Â± 0.0176 | 0.7091 Â± 0.0276 |
+| synflood | `rejection_only` | 0.9393 Â± 0.0421 | 0.5642 Â± 0.1720 | 0.2594 Â± 0.1313 | 0.6263 Â± 0.2200 | 0.0535 Â± 0.0231 | 0.7099 Â± 0.0436 |
+
+
+## 3. Unknown Precision by Method and Family
+
+| Method | httpflood (mean Â± std) | scans (mean Â± std) | slowrate (mean Â± std) | synflood (mean Â± std) | Overall Mean |
+| --- | --- | --- | --- | --- | --- |
+| **anomaly_only** | 0.4549 Â± 0.1982 | 0.0082 Â± 0.0053 | 0.0094 Â± 0.0142 | 0.0007 Â± 0.0011 | 0.1183 Â± 0.2193 |
+| **classifier_only** | 0.0000 Â± 0.0000 | 0.0000 Â± 0.0000 | 0.0000 Â± 0.0000 | 0.0000 Â± 0.0000 | 0.0000 Â± 0.0000 |
+| **energy** | n/a: no logits | n/a: no logits | n/a: no logits | n/a: no logits | n/a: no logits |
+| **mahalanobis** | 0.8196 Â± 0.0599 | 0.0646 Â± 0.0289 | 0.0345 Â± 0.0387 | 0.0057 Â± 0.0085 | 0.2311 Â± 0.3511 |
+| **msp_uncalibrated** | 0.6757 Â± 0.3222 | 0.0253 Â± 0.0168 | 0.0248 Â± 0.0283 | 0.2074 Â± 0.1539 | 0.2333 Â± 0.3187 |
+| **proposed** | 0.8720 Â± 0.0578 | 0.0857 Â± 0.1135 | 0.8098 Â± 0.1231 | 0.3336 Â± 0.1953 | 0.5253 Â± 0.3579 |
+| **proposed_maha** | 0.8708 Â± 0.0628 | 0.0646 Â± 0.0370 | 0.8268 Â± 0.1012 | 0.4132 Â± 0.1367 | 0.5438 Â± 0.3483 |
+| **rejection_only** | 0.9009 Â± 0.0647 | 0.0585 Â± 0.0658 | 0.1941 Â± 0.1773 | 0.2594 Â± 0.1313 | 0.3532 Â± 0.3505 |
+
+
+## 4. Temperature Calibration Effect
+
+Temperature scaling parameter $T$ and Expected Calibration Error (ECE) before/after scaling.
+
+| Family | Temperature T | ECE Raw (Before) | ECE Calibrated (After) |
+| --- | --- | --- | --- |
+| **httpflood** | 3.1839 Â± 0.3154 | 0.1792 Â± 0.0393 | 0.1358 Â± 0.0245 |
+| **scans** | 3.1323 Â± 0.1538 | 0.1147 Â± 0.0290 | 0.0819 Â± 0.0196 |
+| **slowrate** | 3.1160 Â± 0.1255 | 0.1466 Â± 0.0296 | 0.1072 Â± 0.0256 |
+| **synflood** | 2.9164 Â± 0.1604 | 0.1152 Â± 0.0290 | 0.0860 Â± 0.0208 |
+
+
+## 5. Threshold Rejection Trade-Off (E4)
+
+Empirical known acceptance rate and unknown detection rate across rejection thresholds.
+
+| Target Known Accept | Empirical Known Accept Rate | Unknown Detection Rate |
+| --- | --- | --- |
+| **0.8** | 0.7800 Â± 0.0396 | 0.7697 Â± 0.2984 |
+| **0.85** | 0.8362 Â± 0.0370 | 0.6826 Â± 0.3139 |
+| **0.9** | 0.8945 Â± 0.0379 | 0.5946 Â± 0.3212 |
+| **0.95** | 0.9475 Â± 0.0274 | 0.4963 Â± 0.3233 |
+| **0.99** | 0.9905 Â± 0.0062 | 0.4204 Â± 0.2904 |
+
+
+## 6. Diagnostic Figures
+
+- ![ROC Curves](fig_roc_curves.png)
+
+- ![PR Curves](fig_pr_curves.png)
+
+- ![Per-Class Flag-Rate Heatmap](fig_flag_rate_heatmap.png)
+
+- ![Reliability Diagrams](fig_reliability_diagrams.png)
+
+- ![Threshold Trade-off](fig_threshold_tradeoff.png)

@@ -1,0 +1,4 @@
+model,best_params,best_cv_macro_f1,default_val_macro_f1,tuned_val_macro_f1,val_f1_delta
+rf,"{'max_depth': 25, 'min_samples_split': 5, 'n_estimators': 150}",0.9975087992032368,0.9981955789181491,0.9986377412530573,0.00044216233490812495
+xgb,"{'max_depth': 4, 'learning_rate': 0.1, 'subsample': 0.8}",0.9985454766509766,0.9982370673146658,0.9977569484274115,-0.0004801188872542994
+lgbm,"{'num_leaves': 31, 'learning_rate': 0.1, 'max_depth': -1}",0.9981407759622386,0.9981955789181491,0.9981955789181491,0.0

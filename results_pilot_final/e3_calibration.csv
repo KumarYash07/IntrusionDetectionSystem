@@ -1,0 +1,5 @@
+,T,T,ece_raw,ece_raw,ece_cal,ece_cal
+,mean,std,mean,std,mean,std
+family,,,,,,
+httpflood,2.7194,,0.2159,,0.1699,
+scans,2.2934,,0.1489,,0.1122,

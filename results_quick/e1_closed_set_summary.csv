@@ -1,0 +1,9 @@
+,seed,seed,accuracy,accuracy,precision,precision,recall,recall,macro_f1,macro_f1,val_macro_f1,val_macro_f1,fit_seconds,fit_seconds,latency_ms_batch,latency_ms_batch,latency_ms_single,latency_ms_single,model_size_mb,model_size_mb
+,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std
+model,,,,,,,,,,,,,,,,,,,,
+hgb,0.0,,0.8103,,0.6051,,0.6266,,0.5926,,0.6116,,0.473,,0.0013,,0.7597,,0.3752,
+lgbm,0.0,,0.7349,,0.4134,,0.463,,0.3983,,0.4199,,2.1739,,0.0048,,1.0002,,1.8669,
+majority_baseline,0.0,,0.3393,,0.0377,,0.1111,,0.0563,,,,,,,,,,,
+rf,0.0,,0.8313,,0.7761,,0.808,,0.7808,,0.8697,,0.8575,,0.0041,,25.9596,,64.0821,
+shuffled_label_rf,0.0,,0.2715,,0.1171,,0.1161,,0.1128,,,,,,,,,,,
+xgb,0.0,,0.8176,,0.8285,,0.8402,,0.8149,,0.8926,,4.8156,,0.0045,,0.6282,,3.3461,

@@ -1,0 +1,33 @@
+# Ablation (b): Merge the three scan classes into one class "Scan" via label_map
+data_path: data/Combined.csv
+label_col: Attack Type
+benign_label: Benign
+label_map:
+  TCPConnectScan: Scan
+  SYNScan: Scan
+  UDPScan: Scan
+order_col: 'Unnamed: 0'
+blocks_per_class: 50
+group_col: __block
+time_col: null
+drop_cols: [
+  'Unnamed: 0', Seq, Offset, Label, Attack Tool, sVid, dVid, SrcTCPBase, DstTCPBase
+]
+families:
+  httpflood: [HTTPFlood]
+  slowrate: [SlowrateDoS]
+  synflood: [SYNFlood]
+  scans: [Scan]
+holdout_families: [httpflood, slowrate, synflood, scans]
+seeds: [1, 2, 3, 4, 5]
+test_size: 0.2
+val_size: 0.15
+select_k: null
+models: [rf, lr, hgb, xgb, lgbm]
+model: lgbm
+anomaly: iforest
+class_balance: balanced
+known_accept_rate: 0.95
+fpr_target: 0.05
+max_train_rows: 200000
+results_dir: results_ablation_merge_scans

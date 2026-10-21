@@ -1,0 +1,35 @@
+# Real run on 5G-NIDD Combined.csv (columns taken from the file you printed).
+data_path: data/Combined.csv
+label_col: "Attack Type"
+benign_label: "Benign"
+
+# Row order is used only to build blocks (no session id exists), then dropped.
+order_col: "Unnamed: 0"
+blocks_per_class: 50          # each class is cut into 50 contiguous blocks; whole blocks go to train/val/test
+group_col: "__block"          # created by the code
+time_col: null
+
+# Dropped columns: row index / sequence / file offset (position leaks), binary Label and Attack Tool
+# (reveal the label), VLAN ids and TCP base numbers (capture/session artifacts).
+drop_cols: ["Unnamed: 0", "Seq", "Offset", "Label", "Attack Tool", "sVid", "dVid", "SrcTCPBase", "DstTCPBase"]
+
+# Hold-out groups (ONE group is unknown per run). Checked against the Attack Type counts you printed.
+families:
+  httpflood: [HTTPFlood]
+  slowrate: [SlowrateDoS]
+  synflood: [SYNFlood]
+  scans: [TCPConnectScan, SYNScan, UDPScan]
+holdout_families: [httpflood, scans]
+
+seeds: [100, 101, 102]
+test_size: 0.2
+val_size: 0.15
+select_k: null
+models: [rf, xgb, lgbm]
+model: hgb                     # after E1, set to the best model; energy baseline needs xgb, lgbm or lr
+anomaly: iforest
+class_balance: sqrt
+known_accept_rate: 0.95
+fpr_target: 0.05
+max_train_rows: 100000
+results_dir: results_select_sqrt

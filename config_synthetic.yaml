@@ -1,0 +1,22 @@
+# SYNTHETIC DATA ONLY: for testing that the code runs. Results are meaningless.
+data_path: data/synthetic.csv
+label_col: "Attack Type"
+benign_label: "Benign"
+drop_cols: []
+group_col: session_id
+time_col: null
+families:
+  dos: [UDPFlood, SYNFlood]
+  scan: [SYNScan, UDPScan]
+holdout_families: [dos, scan]
+seeds: [0, 1]
+test_size: 0.2
+val_size: 0.15
+select_k: null
+models: [rf, lr, hgb]
+model: hgb
+anomaly: iforest
+known_accept_rate: 0.95
+fpr_target: 0.05
+max_train_rows: 50000
+results_dir: results_synthetic

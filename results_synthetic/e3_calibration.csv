@@ -1,0 +1,5 @@
+,T,T,ece_raw,ece_raw,ece_cal,ece_cal
+,mean,std,mean,std,mean,std
+family,,,,,,
+dos,1.5027,0.6444,0.0013,0.0012,0.0014,0.0014
+scan,1.032,0.5846,0.0012,0.0003,0.0011,0.0001
