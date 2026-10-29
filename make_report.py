@@ -5,7 +5,7 @@ Inputs (from results directory):
 - scores_{family}_seed{seed}.npz
 
 Outputs:
-- report.md (with formatted GitHub markdown tables)
+- report.md (with formatted GitHub markdown tables, when --out-dir specified)
 - fig_roc_curves.png
 - fig_pr_curves.png
 - fig_flag_rate_heatmap.png
@@ -24,11 +24,49 @@ matplotlib.use("Agg")  # Non-interactive backend
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, precision_recall_curve, auc
 
+# Standardized display names matching paper
+METHOD_DISPLAY_NAMES = {
+    "proposed": "CR+IF",
+    "proposed_maha": "CR+Maha",
+    "rejection_only": "Rejection only",
+    "mahalanobis": "Mahalanobis only",
+    "msp_uncalibrated": "MSP",
+    "anomaly_only": "Isolation Forest",
+    "classifier_only": "Classifier only",
+    "energy": "Energy",
+}
+
+# Standardized order across all figures
+METHOD_ORDER = [
+    "proposed",
+    "proposed_maha",
+    "rejection_only",
+    "mahalanobis",
+    "msp_uncalibrated",
+    "anomaly_only",
+    "classifier_only",
+    "energy",
+]
+
+# Standardized color palette across all figures
+METHOD_COLORS = {
+    "proposed": "#1f77b4",        # CR+IF (blue)
+    "proposed_maha": "#2ca02c",   # CR+Maha (green)
+    "rejection_only": "#ff7f0e",  # Rejection only (orange)
+    "mahalanobis": "#9467bd",     # Mahalanobis only (purple)
+    "energy": "#d62728",          # Energy (red)
+    "msp_uncalibrated": "#8c564b",# MSP (brown)
+    "anomaly_only": "#7f7f7f",    # Isolation Forest (gray)
+    "classifier_only": "#17becf", # Classifier only (cyan)
+}
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Generate markdown report and figures from saved results.")
     parser.add_argument("--results-dir", default="results_final", help="Path to experiment results directory")
-    parser.add_argument("--out-dir", default=None, help="Directory to save report and plots (defaults to results-dir)")
+    parser.add_argument("--out-dir", default=None, help="Directory to save report.md (only written if explicitly specified)")
+    parser.add_argument("--figures-dir", default=None, help="Directory to save figures (defaults to <results-dir>/figures_paper)")
+    parser.add_argument("--dpi", type=int, default=300, help="Resolution in DPI for generated figures (default: 300)")
     parser.add_argument("--model", default=None, help="Model name (e.g. rf, hgb, xgb, lgbm). If not provided, inferred automatically from config.")
     return parser.parse_args()
 
@@ -85,7 +123,8 @@ def build_markdown_tables(results_dir, out_dir, model=None):
         md_lines.append("| " + " | ".join(["---"] * len(header)) + " |")
         
         for method, row in summ.iterrows():
-            row_vals = [f"**{method}**"]
+            disp_m = METHOD_DISPLAY_NAMES.get(method, method)
+            row_vals = [f"**{disp_m}**"]
             if method == "energy" and model in ["rf", "hgb"]:
                 row_vals.extend(["n/a: no logits"] * len(avail_cols))
             else:
@@ -102,7 +141,8 @@ def build_markdown_tables(results_dir, out_dir, model=None):
         md_lines.append("| " + " | ".join(["---"] * len(fam_header)) + " |")
         
         for (fam, method), row in fam_summ.iterrows():
-            row_vals = [fam, f"`{method}`"]
+            disp_m = METHOD_DISPLAY_NAMES.get(method, method)
+            row_vals = [fam, f"`{disp_m}`"]
             if method == "energy" and model in ["rf", "hgb"]:
                 row_vals.extend(["n/a: no logits"] * len(avail_cols))
             else:
@@ -123,7 +163,8 @@ def build_markdown_tables(results_dir, out_dir, model=None):
             md_lines.append("| " + " | ".join(["---"] * len(up_header)) + " |")
             
             for m in up_pivot_mean.index:
-                row_vals = [f"**{m}**"]
+                disp_m = METHOD_DISPLAY_NAMES.get(m, m)
+                row_vals = [f"**{disp_m}**"]
                 if m == "energy" and model in ["rf", "hgb"]:
                     row_vals.extend(["n/a: no logits"] * (len(fams) + 1))
                 else:
@@ -191,7 +232,7 @@ def build_markdown_tables(results_dir, out_dir, model=None):
     print(f"[report] Saved markdown report to: {report_path}")
 
 
-def plot_flag_rate_heatmap(results_dir, out_dir, model=None):
+def plot_flag_rate_heatmap(results_dir, out_dir, model=None, dpi=300):
     pc_file = os.path.join(results_dir, "e2_per_class.csv")
     if not os.path.exists(pc_file):
         print(f"[skip] {pc_file} not found for heatmap")
@@ -201,8 +242,16 @@ def plot_flag_rate_heatmap(results_dir, out_dir, model=None):
         return
     if model in ["rf", "hgb"]:
         df = df[df["method"] != "energy"]
+
     # Pivot: rows = method, cols = known class, values = mean flag rate
     pivot = df.pivot_table(index="method", columns="cls", values="flag_rate", aggfunc="mean").fillna(0.0)
+    
+    # Enforce standard method order
+    avail_methods = [m for m in METHOD_ORDER if m in pivot.index] + [m for m in pivot.index if m not in METHOD_ORDER]
+    pivot = pivot.reindex(avail_methods)
+
+    # Rename rows using paper naming conventions
+    row_display_labels = [METHOD_DISPLAY_NAMES.get(m, m) for m in pivot.index]
     
     # Calculate mean test-flow count per class
     counts = df.groupby("cls")["n"].mean() if "n" in df.columns else {}
@@ -214,32 +263,36 @@ def plot_flag_rate_heatmap(results_dir, out_dir, model=None):
         else:
             col_labels.append(str(c))
             
-    plt.figure(figsize=(max(8.5, len(pivot.columns) * 1.3), max(5.5, len(pivot.index) * 0.65)))
+    fig_w = max(9.5, len(pivot.columns) * 1.35)
+    fig_h = max(5.5, len(pivot.index) * 0.75)
+    plt.figure(figsize=(fig_w, fig_h))
     ax = plt.gca()
     cax = ax.matshow(pivot.values, cmap="YlOrRd", vmin=0.0, vmax=max(0.2, pivot.values.max()))
-    plt.colorbar(cax, label="False Alarm Flag Rate on Known Classes")
+    cb = plt.colorbar(cax)
+    cb.set_label("False Alarm Flag Rate on Known Classes", fontsize=10)
+    cb.ax.tick_params(labelsize=9)
     
     ax.set_xticks(range(len(pivot.columns)))
-    ax.set_xticklabels(col_labels, rotation=45, ha="left", fontsize=8.5)
+    ax.set_xticklabels(col_labels, rotation=45, ha="left", fontsize=9.5)
     ax.set_yticks(range(len(pivot.index)))
-    ax.set_yticklabels(pivot.index, fontsize=9)
+    ax.set_yticklabels(row_display_labels, fontsize=9.5)
     
-    # Annotate values inside cells
+    # Annotate values inside cells with font size >= 9 pt
     for i in range(len(pivot.index)):
         for j in range(len(pivot.columns)):
             val = pivot.values[i, j]
             color = "white" if val > (cax.norm.vmax * 0.6) else "black"
-            ax.text(j, i, f"{val:.3f}", ha="center", va="center", color=color, fontsize=8)
+            ax.text(j, i, f"{val:.3f}", ha="center", va="center", color=color, fontsize=9.5)
             
-    plt.title("Per-Class False Alarm Flag-Rate on Known Classes\n(with Mean Flow Count n per Class)", pad=35, fontsize=11, fontweight="bold")
+    plt.title("Per-Class False Alarm Flag-Rate on Known Classes\n(with Mean Flow Count n per Class)", pad=40, fontsize=11.5, fontweight="bold")
     plt.tight_layout()
     out_path = os.path.join(out_dir, "fig_flag_rate_heatmap.png")
-    plt.savefig(out_path, dpi=200)
+    plt.savefig(out_path, dpi=dpi)
     plt.close()
     print(f"[plot] Saved flag rate heatmap: {out_path}")
 
 
-def plot_reliability_diagrams(npz_files, out_dir, results_dir=None, bins=10):
+def plot_reliability_diagrams(npz_files, out_dir, results_dir=None, bins=10, dpi=300):
     if not npz_files:
         print("[skip] No npz files found for reliability diagrams")
         return
@@ -300,10 +353,10 @@ def plot_reliability_diagrams(npz_files, out_dir, results_dir=None, bins=10):
                 bin_counts.append(0)
         return edges, np.array(bin_acc), np.array(bin_conf), np.array(bin_counts), ece
 
-    fig, axes = plt.subplots(1, 2, figsize=(12, 5.2))
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5.5))
     
     titles_meta = [
-        ("Before Scaling (Raw Softmax)", 0),
+        ("Before Scaling (Raw Softmax / MSP)", 0),
         ("After Temperature Scaling", 2)
     ]
     
@@ -316,15 +369,16 @@ def plot_reliability_diagrams(npz_files, out_dir, results_dir=None, bins=10):
         ax.bar(centers[valid], b_acc[valid], width=width, color="#3498db", alpha=0.7, edgecolor="black", label="Outputs (Empirical Accuracy)")
         ax.plot([0, 1], [0, 1], "--", color="red", linewidth=1.5, label="Perfect Calibration")
 
-        # Show sample count per bin on top of valid bars
+        # Show sample count per bin on top of valid bars with font size >= 9 pt
         for c, a, cnt in zip(centers[valid], b_acc[valid], b_cnt[valid]):
             if cnt > 0:
-                ax.text(c, a + 0.02, f"n={cnt:,}", ha="center", va="bottom", fontsize=7.5, rotation=35)
+                ax.text(c, a + 0.02, f"n={cnt:,}", ha="center", va="bottom", fontsize=9, rotation=35)
 
         ax.set_xlim([0, 1])
         ax.set_ylim([0, 1.25])
         ax.set_xlabel("Confidence", fontsize=10)
         ax.set_ylabel("Accuracy", fontsize=10)
+        ax.tick_params(labelsize=9)
         
         if cal_summary is not None:
             mean_v, std_v = cal_summary[cal_idx], cal_summary[cal_idx + 1]
@@ -333,20 +387,20 @@ def plot_reliability_diagrams(npz_files, out_dir, results_dir=None, bins=10):
         else:
             title_text = f"{title_base} [Pooled Across Runs]\nPooled ECE = {ece:.4f}"
             
-        ax.set_title(title_text, fontsize=10, fontweight="bold", pad=8)
+        ax.set_title(title_text, fontsize=10.5, fontweight="bold", pad=8)
         ax.grid(True, linestyle=":", alpha=0.6)
         # Move legend outside the bars below the axis
-        ax.legend(bbox_to_anchor=(0.5, -0.22), loc="upper center", ncol=2, fontsize=8.5, frameon=True)
+        ax.legend(bbox_to_anchor=(0.5, -0.20), loc="upper center", ncol=2, fontsize=9.5, frameon=True)
 
     plt.suptitle("Reliability Diagrams (Pooled Across All Test Runs)", fontsize=12, fontweight="bold", y=0.98)
     plt.tight_layout(rect=[0, 0.08, 1, 0.95])
     out_path = os.path.join(out_dir, "fig_reliability_diagrams.png")
-    plt.savefig(out_path, dpi=200)
+    plt.savefig(out_path, dpi=dpi)
     plt.close()
     print(f"[plot] Saved reliability diagrams: {out_path}")
 
 
-def plot_roc_and_pr_curves(npz_files, out_dir, results_dir=None, model=None):
+def plot_roc_and_pr_curves(npz_files, out_dir, results_dir=None, model=None, dpi=300):
     if not npz_files:
         print("[skip] No npz files found for ROC/PR curves")
         return
@@ -377,19 +431,7 @@ def plot_roc_and_pr_curves(npz_files, out_dir, results_dir=None, model=None):
     if model in ["rf", "hgb"]:
         raw_methods = [m for m in raw_methods if m != "energy"]
 
-    preferred_order = ["proposed", "proposed_maha", "rejection_only", "mahalanobis", "energy", "msp_uncalibrated", "anomaly_only"]
-    methods = [m for m in preferred_order if m in raw_methods] + [m for m in raw_methods if m not in preferred_order]
-
-    # Color palette
-    method_colors = {
-        "proposed": "#1f77b4",        # blue
-        "proposed_maha": "#2ca02c",   # green
-        "rejection_only": "#ff7f0e",  # orange
-        "mahalanobis": "#9467bd",     # purple
-        "energy": "#d62728",          # red
-        "msp_uncalibrated": "#8c564b",# brown
-        "anomaly_only": "#7f7f7f",    # gray
-    }
+    methods = [m for m in METHOD_ORDER if m in raw_methods] + [m for m in raw_methods if m not in METHOD_ORDER]
 
     n_fams = len(fams)
     ncols = 2 if n_fams > 1 else 1
@@ -431,36 +473,33 @@ def plot_roc_and_pr_curves(npz_files, out_dir, results_dir=None, model=None):
             if val_auroc is None or pd.isna(val_auroc):
                 val_auroc = auc(common_fpr, mean_tpr)
 
+            disp_name = METHOD_DISPLAY_NAMES.get(m, m)
             lw = 2.4 if "proposed" in m else 1.5
             ls = "-" if "proposed" in m else ("-." if "rejection" in m else "--")
-            color = method_colors.get(m, None)
+            color = METHOD_COLORS.get(m, None)
 
-            ax.plot(common_fpr, mean_tpr, label=f"{m} (AUROC = {val_auroc:.4f})", linewidth=lw, linestyle=ls, color=color)
+            ax.plot(common_fpr, mean_tpr, label=f"{disp_name} (AUROC = {val_auroc:.4f})", linewidth=lw, linestyle=ls, color=color)
             if len(tpr_list) > 1 and np.max(std_tpr) > 0.0001:
                 ax.fill_between(common_fpr, np.clip(mean_tpr - std_tpr, 0, 1), np.clip(mean_tpr + std_tpr, 0, 1), color=color, alpha=0.15)
 
         ax.plot([0, 1], [0, 1], "k:", alpha=0.5, label="Chance")
         ax.set_xlim([0.0, 1.0])
         ax.set_ylim([0.0, 1.02])
-        ax.set_xlabel("False Positive Rate (Knowns Flagged)", fontsize=9.5)
-        ax.set_ylabel("True Positive Rate (Unknowns Detected)", fontsize=9.5)
+        ax.set_xlabel("False Positive Rate (Knowns Flagged)", fontsize=10)
+        ax.set_ylabel("True Positive Rate (Unknowns Detected)", fontsize=10)
         ax.set_title(f"Held-out Family: {fam}", fontsize=11, fontweight="bold")
-        ax.legend(loc="lower right", fontsize=8)
+        ax.tick_params(labelsize=9)
+        ax.legend(loc="lower right", fontsize=9)
         ax.grid(True, linestyle=":", alpha=0.6)
 
     # Hide any unused subplots
     for ax in axes_flat[n_fams:]:
         ax.set_visible(False)
 
-    fig.suptitle("Receiver Operating Characteristic (ROC) Curves by Held-Out Family", fontsize=13, fontweight="bold", y=0.99)
-    caption_text = (
-        "Note: Curves show mean ± std across seeds on a common grid for each held-out family. Legend values match per-family means in e2_per_family.csv.\n"
-        "(The pooled alternative concatenates raw test scores across all families into a single curve, but distorts evaluation due to cross-family prevalence and score shift)."
-    )
-    fig.text(0.5, 0.01, caption_text, ha="center", fontsize=8.5, style="italic")
-    plt.tight_layout(rect=[0, 0.05, 1, 0.96])
+    fig.suptitle("Receiver Operating Characteristic (ROC) Curves by Held-Out Family", fontsize=13, fontweight="bold", y=0.98)
+    plt.tight_layout(rect=[0, 0.02, 1, 0.96])
     roc_out = os.path.join(out_dir, "fig_roc_curves.png")
-    plt.savefig(roc_out, dpi=200)
+    plt.savefig(roc_out, dpi=dpi)
     plt.close()
     print(f"[plot] Saved ROC curves: {roc_out}")
 
@@ -498,74 +537,83 @@ def plot_roc_and_pr_curves(npz_files, out_dir, results_dir=None, model=None):
             if val_aupr is None or pd.isna(val_aupr):
                 val_aupr = auc(common_rec, mean_prec)
 
+            disp_name = METHOD_DISPLAY_NAMES.get(m, m)
             lw = 2.4 if "proposed" in m else 1.5
             ls = "-" if "proposed" in m else ("-." if "rejection" in m else "--")
-            color = method_colors.get(m, None)
+            color = METHOD_COLORS.get(m, None)
 
-            ax.plot(common_rec, mean_prec, label=f"{m} (AUPR = {val_aupr:.4f})", linewidth=lw, linestyle=ls, color=color)
+            ax.plot(common_rec, mean_prec, label=f"{disp_name} (AUPR = {val_aupr:.4f})", linewidth=lw, linestyle=ls, color=color)
             if len(prec_list) > 1 and np.max(std_prec) > 0.0001:
                 ax.fill_between(common_rec, np.clip(mean_prec - std_prec, 0, 1), np.clip(mean_prec + std_prec, 0, 1), color=color, alpha=0.15)
 
         mean_prev = np.mean([d["is_unk"].mean() for d in fam_data])
-        ax.plot([0, 1], [mean_prev, mean_prev], "k:", alpha=0.5, label=f"Prevalence ({mean_prev:.2f})")
+        # Format prevalence with 3 decimal places (e.g. 0.002)
+        ax.plot([0, 1], [mean_prev, mean_prev], "k:", alpha=0.5, label=f"Prevalence ({mean_prev:.3f})")
         ax.set_xlim([0.0, 1.0])
         ax.set_ylim([0.0, 1.02])
-        ax.set_xlabel("Recall (TPR)", fontsize=9.5)
-        ax.set_ylabel("Precision (Unknown Precision)", fontsize=9.5)
+        ax.set_xlabel("Recall (TPR)", fontsize=10)
+        ax.set_ylabel("Precision (Unknown Precision)", fontsize=10)
         ax.set_title(f"Held-out Family: {fam}", fontsize=11, fontweight="bold")
-        ax.legend(loc="lower left", fontsize=8)
+        ax.tick_params(labelsize=9)
+        ax.legend(loc="lower left", fontsize=9)
         ax.grid(True, linestyle=":", alpha=0.6)
 
     for ax in axes_flat[n_fams:]:
         ax.set_visible(False)
 
-    fig.suptitle("Precision-Recall (PR) Curves by Held-Out Family", fontsize=13, fontweight="bold", y=0.99)
-    fig.text(0.5, 0.01, caption_text, ha="center", fontsize=8.5, style="italic")
-    plt.tight_layout(rect=[0, 0.05, 1, 0.96])
+    fig.suptitle("Precision-Recall (PR) Curves by Held-Out Family", fontsize=13, fontweight="bold", y=0.98)
+    plt.tight_layout(rect=[0, 0.02, 1, 0.96])
     pr_out = os.path.join(out_dir, "fig_pr_curves.png")
-    plt.savefig(pr_out, dpi=200)
+    plt.savefig(pr_out, dpi=dpi)
     plt.close()
     print(f"[plot] Saved PR curves: {pr_out}")
 
 
-def plot_threshold_tradeoff(results_dir, out_dir):
+def plot_threshold_tradeoff(results_dir, out_dir, dpi=300):
     thr_file = os.path.join(results_dir, "e4_threshold.csv")
     if not os.path.exists(thr_file):
         print(f"[skip] {thr_file} not found for threshold plot")
         return
     try:
         df = pd.read_csv(thr_file, header=[0, 1], index_col=0)
-        x = df[("known_accept_rate", "mean")].astype(float)
-        x_err = df[("known_accept_rate", "std")].fillna(0.0).astype(float)
-        y = df[("unknown_detection_rate", "mean")].astype(float)
-        y_err = df[("unknown_detection_rate", "std")].fillna(0.0).astype(float)
+        x = df[("known_accept_rate", "mean")].astype(float).values
+        x_err = df[("known_accept_rate", "std")].fillna(0.0).astype(float).values
+        y = df[("unknown_detection_rate", "mean")].astype(float).values
+        y_err = df[("unknown_detection_rate", "std")].fillna(0.0).astype(float).values
         targets = [str(idx) for idx in df.index]
     except Exception:
         df = pd.read_csv(thr_file)
-        x = df["known_accept_rate"].astype(float)
-        x_err = [0.0] * len(df)
-        y = df["unknown_detection_rate"].astype(float)
-        y_err = [0.0] * len(df)
+        x = df["known_accept_rate"].astype(float).values
+        x_err = np.zeros(len(df))
+        y = df["unknown_detection_rate"].astype(float).values
+        y_err = np.zeros(len(df))
         targets = [str(t) for t in df.get("known_accept_target", range(len(df)))]
+
+    # Clip error bars at 0 and 1 without changing plotted means
+    x_err_clipped = np.array([np.minimum(x_err, x), np.minimum(x_err, 1.0 - x)])
+    y_err_clipped = np.array([np.minimum(y_err, y), np.minimum(y_err, 1.0 - y)])
 
     plt.figure(figsize=(7.5, 5))
     plt.errorbar(
         x, y,
-        xerr=x_err, yerr=y_err,
-        fmt="o-", color="#2c3e50", ecolor="#e74c3c", elinewidth=1.5,
+        xerr=x_err_clipped, yerr=y_err_clipped,
+        fmt="o-", color=METHOD_COLORS.get("rejection_only", "#ff7f0e"),
+        ecolor="#e74c3c", elinewidth=1.5,
         capsize=4, capthick=1.5, linewidth=2, markersize=7,
-        label="Calibrated Rejection (Mean ± Std)"
+        label="Rejection only (Mean ± Std)"
     )
     for t, xi, yi in zip(targets, x, y):
-        plt.annotate(f"Target: {t}", (xi, yi), textcoords="offset points", xytext=(8, -4), fontsize=8.5, fontweight="semibold")
-    plt.xlabel("Empirical Known Acceptance Rate", fontsize=11)
-    plt.ylabel("Unknown Detection Rate", fontsize=11)
-    plt.title("Threshold Trade-Off: Calibrated Rejection Only\n(Known Acceptance vs Unknown Detection)", fontsize=11, fontweight="bold")
+        plt.annotate(f"Target: {t}", (xi, yi), textcoords="offset points", xytext=(8, -4), fontsize=9, fontweight="semibold")
+    plt.xlabel("Empirical Known Acceptance Rate", fontsize=10.5)
+    plt.ylabel("Unknown Detection Rate", fontsize=10.5)
+    plt.ylim(0.0, 1.0)
+    plt.tick_params(labelsize=9.5)
+    plt.title("Threshold Trade-Off: Rejection only\n(Known Acceptance vs Unknown Detection)", fontsize=11.5, fontweight="bold")
     plt.grid(True, linestyle=":", alpha=0.6)
-    plt.legend(loc="lower left", fontsize=9)
+    plt.legend(loc="lower left", fontsize=9.5)
     plt.tight_layout()
     out_path = os.path.join(out_dir, "fig_threshold_tradeoff.png")
-    plt.savefig(out_path, dpi=200)
+    plt.savefig(out_path, dpi=dpi)
     plt.close()
     print(f"[plot] Saved threshold trade-off: {out_path}")
 
@@ -573,33 +621,35 @@ def plot_threshold_tradeoff(results_dir, out_dir):
 def main():
     args = parse_args()
     res_dir = args.results_dir
-    out_dir = args.out_dir or res_dir
-    os.makedirs(out_dir, exist_ok=True)
+    fig_dir = args.figures_dir or os.path.join(res_dir, "figures_paper")
+    os.makedirs(fig_dir, exist_ok=True)
     
     model = detect_model(res_dir, args.model)
-    print(f"Generating report from directory: {res_dir}")
+    print(f"Loading results from directory: {res_dir}")
     if model:
         print(f"Model detected: {model}")
-    print(f"Outputs will be saved to: {out_dir}")
+    print(f"Figures will be saved to: {fig_dir} (dpi={args.dpi})")
     
-    # 1. Build Markdown Tables
-    build_markdown_tables(res_dir, out_dir, model=model)
+    # 1. Build Markdown Tables only if --out-dir is explicitly specified
+    if args.out_dir is not None:
+        os.makedirs(args.out_dir, exist_ok=True)
+        build_markdown_tables(res_dir, args.out_dir, model=model)
     
     # 2. Per-class flag-rate heatmap
-    plot_flag_rate_heatmap(res_dir, out_dir, model=model)
+    plot_flag_rate_heatmap(res_dir, fig_dir, model=model, dpi=args.dpi)
     
     # 3. NPZ files for ROC, PR, and Reliability diagrams
     npz_pattern = os.path.join(res_dir, "scores_*.npz")
     npz_files = glob.glob(npz_pattern)
     print(f"Found {len(npz_files)} npz files matching '{npz_pattern}'")
     
-    plot_reliability_diagrams(npz_files, out_dir, results_dir=res_dir)
-    plot_roc_and_pr_curves(npz_files, out_dir, results_dir=res_dir, model=model)
+    plot_reliability_diagrams(npz_files, fig_dir, results_dir=res_dir, dpi=args.dpi)
+    plot_roc_and_pr_curves(npz_files, fig_dir, results_dir=res_dir, model=model, dpi=args.dpi)
     
     # 4. Threshold trade-off curve
-    plot_threshold_tradeoff(res_dir, out_dir)
+    plot_threshold_tradeoff(res_dir, fig_dir, dpi=args.dpi)
     
-    print("Report and all figures generated successfully.")
+    print(f"All paper figures successfully generated in: {fig_dir}")
 
 
 if __name__ == "__main__":
